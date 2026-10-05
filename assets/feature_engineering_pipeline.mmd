@@ -1,0 +1,17 @@
+flowchart TB
+    subgraph model["Model Pipeline"]
+        subgraph features["ColumnTransformer: feature engineering"]
+            num["Flipper length and bill length"] --> median["Median imputation"] --> scale["RobustScaler"]
+            sex["Sex"] --> mode["Most-frequent imputation"] --> sex_ohe["One-hot encoding"]
+            species["Species"] --> species_ohe["One-hot encoding"]
+            scale --> joined["Join transformed columns"]
+            sex_ohe --> joined
+            species_ohe --> joined
+        end
+        joined --> regression["Linear regression"]
+    end
+    regression --> prediction["Predicted body mass in grams"]
+    classDef step fill:#ffffff,stroke:#54748c,color:#172b3a
+    class num,median,scale,sex,mode,sex_ohe,species,species_ohe,joined,regression,prediction step
+    style model fill:#f6f8fa,stroke:#697886
+    style features fill:#edf6f0,stroke:#609271
